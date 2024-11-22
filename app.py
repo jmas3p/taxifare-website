@@ -36,11 +36,32 @@ if st.button("Predict Fare"):
     st.success(f"Estimated fare: ${prediction:.2f}")
 
 st.markdown("### Map of Pickup and Dropoff Locations")
-map_data = pd.DataFrame(
-    [
-        {"lat": pickup_latitude, "lon": pickup_longitude, "type": "Pickup"},
-        {"lat": dropoff_latitude, "lon": dropoff_longitude, "type": "Dropoff"}
-    ]
-)
 
-st.map(map_data)
+# Initialize Folium map
+m = folium.Map(location=[(pickup_latitude + dropoff_latitude) / 2, (pickup_longitude + dropoff_longitude) / 2],
+               zoom_start=12)
+
+# Add pickup marker
+folium.Marker(
+    location=[pickup_latitude, pickup_longitude],
+    popup="Pickup Location",
+    icon=folium.Icon(color="blue", icon="cloud"),
+).add_to(m)
+
+# Add dropoff marker
+folium.Marker(
+    location=[dropoff_latitude, dropoff_longitude],
+    popup="Dropoff Location",
+    icon=folium.Icon(color="red", icon="info-sign"),
+).add_to(m)
+
+# Optionally add a line connecting the two points
+folium.PolyLine(
+    locations=[[pickup_latitude, pickup_longitude], [dropoff_latitude, dropoff_longitude]],
+    color="green",
+    weight=2.5,
+    opacity=1,
+).add_to(m)
+
+# Render the map in Streamlit
+st_data = st_folium(m, width=700, height=500)
