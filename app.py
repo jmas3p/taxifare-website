@@ -38,9 +38,11 @@ if st.button("Predict Fare"):
 
 st.markdown("### Map of Pickup and Dropoff Locations")
 
-# Initialize Folium map
-m = folium.Map(location=[(pickup_latitude + dropoff_latitude) / 2, (pickup_longitude + dropoff_longitude) / 2],
-               zoom_start=12)
+
+# Initialize Folium map, centered between the pickup and dropoff points
+midpoint_lat = (pickup_latitude + dropoff_latitude) / 2
+midpoint_lon = (pickup_longitude + dropoff_longitude) / 2
+m = folium.Map(location=[midpoint_lat, midpoint_lon], zoom_start=13)
 
 # Add pickup marker
 folium.Marker(
@@ -56,13 +58,13 @@ folium.Marker(
     icon=folium.Icon(color="red", icon="info-sign"),
 ).add_to(m)
 
-# Optionally add a line connecting the two points
+# Add a polyline connecting the pickup and dropoff points
 folium.PolyLine(
     locations=[[pickup_latitude, pickup_longitude], [dropoff_latitude, dropoff_longitude]],
     color="green",
-    weight=2.5,
-    opacity=1,
+    weight=3,
+    opacity=0.8,
 ).add_to(m)
 
 # Render the map in Streamlit
-st_data = st_folium(m, width=700, height=500)
+st_folium(m, width=700, height=500)
