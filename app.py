@@ -33,3 +33,13 @@ if st.button("Predict Fare"):
     response = requests.get(url, params=params)
     prediction = response.json().get("fare", "Error: 'fare' key not found in response")
     st.success(f"Estimated fare: ${prediction:.2f}")
+
+st.markdown("### Map of Pickup and Dropoff Locations")
+map_data = pd.DataFrame(
+    [
+        {"lat": pickup_latitude, "lon": pickup_longitude, "type": "Pickup"},
+        {"lat": dropoff_latitude, "lon": dropoff_longitude, "type": "Dropoff"}
+    ]
+)
+
+st.map(map_data)
