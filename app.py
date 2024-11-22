@@ -1,7 +1,8 @@
 import streamlit as st
-import pandas as pd
 from datetime import datetime
 import requests
+import folium
+from streamlit_folium import st_folium
 
 st.title("TaxiFareModel Front")
 st.markdown('''
